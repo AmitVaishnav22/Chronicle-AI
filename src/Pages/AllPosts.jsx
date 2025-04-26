@@ -25,10 +25,6 @@ function AllPosts(){
     };
 
     useEffect(() => {
-        fetchPosts();
-    }, []);
-
-    useEffect(() => {
         fetchPosts(sortOption);
     }, [sortOption]);
 
