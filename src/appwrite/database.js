@@ -168,6 +168,18 @@ export class Service{
             return false
         }
     }
+    async getUserPosts(userId){
+        
+        try {
+            return await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteCollectionId,
+                [Query.equal("userId", userId)]
+            )
+        } catch (error) {
+            console.log(error)
+        }
+    }
     // async getPosts({ queries = [Query.equal("status", "active")], limit = 10, cursor = null }) {
     //     try {
     //         const options = [
