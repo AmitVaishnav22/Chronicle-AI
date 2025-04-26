@@ -94,7 +94,7 @@ export class Service{
         try {
             const postIds = bookmarks.map((bookmark) => bookmark.postId);
             if (postIds.length === 0) return [];
-            const posts = await this.getPosts([Query.equal("$id", postIds)]);
+            const posts = await this.getUserPosts([Query.equal("$id", postIds)]);
             return posts.documents;
         } catch (error) {
             console.error("Error fetching posts for bookmarks:", error);
