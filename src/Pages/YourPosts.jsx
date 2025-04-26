@@ -13,7 +13,7 @@ function YourPosts({userId:propUserId}){
     useEffect(()=>{
         if (userId){
             //console.log("Fetching posts for userId:", userId);
-            service.getUserPosts(userId)
+            service.getUserPosts([Query.equal("userId",userId)])
             .then((posts)=>{
                 if(posts){
                     setPosts(posts.documents)

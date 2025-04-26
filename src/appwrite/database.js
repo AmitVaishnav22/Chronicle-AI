@@ -168,13 +168,13 @@ export class Service{
             return false
         }
     }
-    async getUserPosts(userId){
+    async getUserPosts(queries){
         
         try {
             return await this.databases.listDocuments(
                 config.appwriteDataBaseId,
                 config.appwriteCollectionId,
-                [Query.equal("userId", userId)]
+                [...queries]
             )
         } catch (error) {
             console.log(error)
@@ -329,7 +329,7 @@ export class Service{
                 Query.search("userLikes", currentUserId),
             ];
     
-            const response = await this.getPosts(queries);
+            const response = await this.getUserPosts(queries);
         
             return response.documents; 
         } catch (error) {
