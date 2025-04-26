@@ -148,20 +148,47 @@ export class Service{
         }
     }
 
-    async getPosts(queries = [Query.equal("status", "active")]){
+    async getPosts(sortBy){
         try {
-            //console.log("Querying with:", queries);
+            let queries = [Query.equal("status", "active")];
+    
+            if (sortBy === "new") {
+                queries.push(Query.orderDesc("$createdAt"));
+            } else if (sortBy === "old") {
+                queries.push(Query.orderAsc("$createdAt"));
+            }
+    
             return await this.databases.listDocuments(
-            config.appwriteDataBaseId,
-            config.appwriteCollectionId,
-            queries,
-            )
+                config.appwriteDataBaseId,
+                config.appwriteCollectionId,
+                queries
+            );
         } catch (error) {
             console.log("Appwrite serive :: getPosts :: error", error);
             return false
         }
     }
-
+    // async getPosts({ queries = [Query.equal("status", "active")], limit = 10, cursor = null }) {
+    //     try {
+    //         const options = [
+    //             ...queries,
+    //             Query.limit(limit),
+    //         ];
+    
+    //         if (cursor) {
+    //             options.push(Query.cursorAfter(cursor)); // for pagination
+    //         }
+    
+    //         return await this.databases.listDocuments(
+    //             config.appwriteDataBaseId,
+    //             config.appwriteCollectionId,
+    //             options
+    //         );
+    //     } catch (error) {
+    //         console.log("Appwrite service :: getPosts :: error", error);
+    //         return false;
+    //     }
+    // }
     async getInactivePosts(queries=[Query.equal("status","inactive")]){
         try {
             return await this.databases.listDocuments(
@@ -328,8 +355,72 @@ export class Service{
         }
     }
 
-    
+    async createSearchHistory(userId, searchText,postId,postTitle) {
+        
+        try {
+            return await this.databases.createDocument(
+                config.appwriteDataBaseId,
+                config.appwriteRecentSearchId,
+                ID.unique(),
+                {
+                    userId:userId,
+                    query:searchText.trim(),
+                    postId:postId,
+                    postTitle:postTitle,
+                }
+                
+            );
+        } catch (error) {
+            console.error("Error creating search history:", error);
+            throw error;
+        }
+    }
+    async getSearchHistory(userId) {
+        
+        try {
+            return await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteRecentSearchId,
+                [
+                    Query.equal("userId", userId),
+                    Query.orderDesc("$createdAt")
+                ],
+                100
+            );
+        } catch (error) {
+            console.error("Error fetching search history:", error);
+            throw error;
+        }
+    }
 
+    async deleteSearchHistoryItem(searchId) {
+        try {
+            return await this.databases.deleteDocument(
+                config.appwriteDataBaseId,
+                config.appwriteRecentSearchId,
+                searchId
+            );
+        } catch (error) {
+            console.error("Error deleting search history item:", error);
+            throw error;
+        }
+    }
+    async checkSearchHistory(userId, postId) {
+        try {
+            const response = await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteRecentSearchId,
+                [
+                    Query.equal("userId", userId),
+                    Query.equal("postId", postId),
+                ]
+            );
+            return response.documents.length > 0; 
+        } catch (error) {
+            console.error("Error checking search history:", error);
+            throw error;
+        }
+    }
 
 }
 

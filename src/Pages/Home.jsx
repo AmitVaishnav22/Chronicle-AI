@@ -140,7 +140,7 @@ function Home() {
             {/* Footer Section */}
             <footer className="py-8 bg-gray-900 text-center">
                 <p className="text-gray-400">
-                Explore the source code on our <a href="https://github.com/your-repo" className="text-purple-500 underline">GitHub repository</a>.
+                Explore the source code on our <a href="https://github.com/AmitVaishnav22/Blogify/tree/main" className="text-purple-500 underline">GitHub repository</a>.
                 </p>
             </footer>
         </div>
