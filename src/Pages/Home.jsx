@@ -100,7 +100,7 @@ function Home() {
                 <div className="pain-point-card p-6 bg-gray-800 rounded-lg shadow-lg">
                     <h3 className="text-xl font-bold text-purple-400">Customizable Experience</h3>
                     <p className="text-gray-300 mt-2">
-                    Tailor your blog experience with features designed to meet your needs.
+                    Tailor your articles experience with features designed to meet your needs.
                     </p>
                 </div>
                 </div>
