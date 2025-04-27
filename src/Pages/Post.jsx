@@ -10,7 +10,8 @@ import { removePost } from "../store/postSlice.js";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { FaCommentDots } from "react-icons/fa";
 import { AiOutlineEye } from "react-icons/ai";
-
+import AiService from "../components/BlogAI/BlogAIService.js";
+import SummaryDisplay from "../components/SummaryDisplay.jsx";
 
 export default function Post() {
     const [post, setPost] = useState(null);
@@ -246,7 +247,21 @@ export default function Post() {
             navigate(`/user-info/${userId}`);
         }
     }
-    
+    const [summary, setSummary] = useState("");
+    const handleSummarize = async () => {
+        try {
+          setLoading(true);
+          const prompt = `Summarize the following article:\n\n${post.content}`;
+          const response = await AiService.sendPrompt({ prompt });
+          //console.log(response)
+          setSummary(response.result || "No summary found."); 
+        } catch (error) {
+          console.error("Failed to summarize:", error);
+          setSummary("Failed to get summary.");
+        } finally {
+          setLoading(false);
+        }
+      };
     
     return post ? (
         <div className="py-8">
@@ -288,11 +303,31 @@ export default function Post() {
                     <h1 className="text-2xl text-white font-bold">{post.title}</h1>
                 </div>
                 <div className="flex justify-end mb-4">
+                <button
+                    onClick={handleSummarize}
+                    className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-2 px-4 transition-all rounded-l"
+                    disabled={loading}
+                >
+                    {loading ? "Summarizing..." : "✨ Summarize Content"}
+                </button>
+                {summary && (
+                <div className="fixed inset-0 flex items-center justify-end right-10 bg-black bg-opacity-50 z-50">
+                    <div className="bg-purple-600 text-white p-6 rounded-xl max-w-md w-full relative">
+                    <button
+                        onClick={() => setSummary(null)}
+                        className="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-600 rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                    >
+                        ❌
+                    </button>
+                    <SummaryDisplay summary={summary} />
+                    </div>
+                </div>
+                )}
                     <button
                         onClick={isSpeaking ? stopSpeaking : speakContent}
-                        className={`px-4 py-1 ${
-                        isSpeaking ? 'bg-red-600 hover:bg-red-700' : 'bg-purple-700 hover:bg-purple-800'
-                        } text-white rounded-l shadow transition`}
+                        className={`px-4 py-1 text-white text-xs font-bold ${
+                        isSpeaking ? 'bg-red-600 hover:bg-red-700 ' : 'bg-purple-600 hover:bg-purple-700 rounded-r'
+                        } text-white shadow transition`}
                     >
                         {isSpeaking ? '🛑 Stop' : '🎧 Listen to Content'}
                     </button>
