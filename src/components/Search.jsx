@@ -10,7 +10,7 @@ const SearchBar = () => {
 
     const postsData = useSelector((state) => state.posts) 
     const userData = useSelector((state) => state.auth.userData)
-    console.log(userData)
+    //console.log(userData)
 
     const navigate = useNavigate();
 

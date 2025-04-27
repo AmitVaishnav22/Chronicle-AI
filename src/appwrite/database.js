@@ -30,10 +30,36 @@ export class Service{
                     featuredImg, 
                     status,
                     userId,
-                    userName
+                    userName,
+                    Views:0,
                 }
             )
         } catch (error) {
+            throw error;
+        }
+    }
+    async updatePostViews(postId) {
+        try {
+            const post = await this.databases.getDocument(
+                config.appwriteDataBaseId,
+                config.appwriteCollectionId,
+                postId
+            );
+            //console.log("post",post)
+    
+            const updatedViews = (post.Views || 0) + 1; 
+            //console.log("updatedViews",updatedViews)
+    
+            return await this.databases.updateDocument(
+                config.appwriteDataBaseId,
+                config.appwriteCollectionId,
+                postId,
+                {
+                    Views: updatedViews, 
+                }
+            );
+        } catch (error) {
+            console.error("Error updating post views:", error);
             throw error;
         }
     }
@@ -154,6 +180,8 @@ export class Service{
     
             if (sortBy === "new") {
                 queries.push(Query.orderDesc("$createdAt"));
+            } else if (sortBy === "popular") {
+                queries.push(Query.orderDesc("Views"));
             } else if (sortBy === "old") {
                 queries.push(Query.orderAsc("$createdAt"));
             }
@@ -166,7 +194,7 @@ export class Service{
         } catch (error) {
             console.log("Appwrite serive :: getPosts :: error", error);
             return false
-        }
+        } 
     }
     async getUserPosts(queries){
         

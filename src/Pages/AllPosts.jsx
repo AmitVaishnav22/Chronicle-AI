@@ -13,7 +13,7 @@ function AllPosts(){
     const fetchPosts = async (sortOption) => {
         try {
             const result = await service.getPosts(sortOption); 
-            console.log(result.documents);
+            //console.log(result.documents);
     
             if (result) {
                 setPostss(result.documents);
@@ -42,6 +42,7 @@ function AllPosts(){
                     className="bg-black text-purple-400 border border-purple-700 rounded-md px-4 py-2"
                 >
                     <option value="new">Newly Posted</option>
+                    <option value="popular">Most Popular</option>
                     <option value="old">Oldest Posted</option>
                 </select>
             </div>

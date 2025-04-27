@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { removePost } from "../store/postSlice.js";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { FaCommentDots } from "react-icons/fa";
+import { AiOutlineEye } from "react-icons/ai";
 
 
 export default function Post() {
@@ -387,6 +388,10 @@ export default function Post() {
                     <div className="flex items-center text-gray-400">
                         <FaCommentDots size={24} />
                         <span className="ml-2">{post.comments?.length || 0} Comments</span>
+                    </div>
+                    <div className="flex items-center text-gray-400">
+                        <AiOutlineEye size={16} className="ml-1" />
+                        <span className="ml-2">{post.Views || 0} Views </span>
                     </div>
                 </div>
             </div>

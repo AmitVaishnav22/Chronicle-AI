@@ -5,12 +5,13 @@ import { Link } from "react-router-dom";
 import authService from "../appwrite/auth";
 import { FaCommentDots } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
+import { AiOutlineEye } from "react-icons/ai";
 
-function PostCard({ $id, title, featuredImg ,userId,likes,comments,userName}) {
+function PostCard({ $id, title, featuredImg ,userId,likes,comments,userName,Views}) {
   const [user,setUser]=useState(null)
   const navigate = useNavigate();
   
-  useEffect(()=>{
+  useEffect(()=>{ 
     authService.getCurrUser().then((user)=>{
       if(user){
         setUser(user.$id)
@@ -23,10 +24,19 @@ function PostCard({ $id, title, featuredImg ,userId,likes,comments,userName}) {
   const handleUserClick=()=>{
     navigate(`/user-info/${userId}`)
   }
+  const handlePostClick = async () => {
+    try {
+      await service.updatePostViews($id); 
+      navigate(`/post/${$id}`);
+    } catch (error) {
+      console.error("Failed to increment views:", error);
+      navigate(`/post/${$id}`);
+    }
+  };
   const isUserPost=userId===user
   return (
     <>
-    <Link to={`/post/${$id}`} className="w-full max-w-[300px]">
+    <Link to={`/post/${$id}`} className="w-full max-w-[300px]" onClick={(e)=>{e.preventDefault();handlePostClick()}}>
         <div
           className={`h-[250px] bg-black rounded-xl p-4 flex flex-col justify-between border-2 border-transparent transition-all duration-300 
             ${isUserPost 
@@ -49,7 +59,10 @@ function PostCard({ $id, title, featuredImg ,userId,likes,comments,userName}) {
       </h2>
 
       {/* Likes & Comments */}
-      <div className="flex items-center justify-center gap-6 mt-2">
+      <div className="flex items-center justify-center gap-16 mt-2">
+        <h2 className="text-sm font-bold text-purple-500 flex items-center">
+          {Views} <AiOutlineEye size={16} className="ml-1" />
+        </h2>
         <h2 className="text-sm font-bold text-purple-500 flex items-center">
           {likes} <AiFillLike size={16} className="ml-1" />
         </h2>
