@@ -1,32 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Container,PostCard} from "../components";
 import service from "../appwrite/database";
 import SearchBar from "../components/Search.jsx"
 import {  setPosts} from "../../src/store/postSlice.js"
 import { useDispatch } from "react-redux";
 
+const LIMIT=8;
 
 function AllPosts(){
-    const [posts,setPostss]=useState([])
+    const [posts,setPosts]=useState([])
     const [sortOption, setSortOption] = useState("new");
+    const [page,setPage]=useState(0)
+    const [hasMore,setHasMore]=useState(true)
+    const [loading,setLoading]=useState(false)
+
+    const observer=React.useRef()
     const dispatch=useDispatch()
-    const fetchPosts = async (sortOption) => {
+    const fetchPosts = async (sortOption,offset) => {
         try {
-            const result = await service.getPosts(sortOption); 
+            setLoading(true);
+            const result = await service.getPosts(sortOption,LIMIT,offset); 
             //console.log(result.documents);
     
             if (result) {
-                setPostss(result.documents);
-                dispatch(setPosts(result.documents));
+                const newPosts = result.documents;
+                setPosts((prev)=>[...prev,...newPosts]);
+                dispatch(setPosts([...posts,...newPosts]));
+                setHasMore(newPosts.length === LIMIT);
             }
         } catch (error) {
             console.error("Error fetching posts:", error);
         }
+        finally {
+            setLoading(false);
+        }
     };
+    useEffect(() => {
+        // Reset when sort changes
+        setPosts([]);
+        setPage(0);
+        setHasMore(true);
+    }, [sortOption]);
 
     useEffect(() => {
-        fetchPosts(sortOption);
-    }, [sortOption]);
+        fetchPosts(sortOption,0); //currently due to less posts , we will be setting offset to 0
+    }, [sortOption,page]);
+
+    const lastPostRef= useCallback((node)=>{
+        if (observer.current) observer.current.disconnect();
+        observer.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting && hasMore) {
+                setPage((prevPage) => prevPage + 1);
+            }
+        });
+        if (node) observer.current.observe(node);
+    },[hasMore]);
 
     return (
         <>
@@ -46,15 +74,29 @@ function AllPosts(){
                     <option value="old">Oldest Posted</option>
                 </select>
             </div>
-        <div className='w-full py-8'>
+        <div className="w-full py-8">
             <Container>
-                <div className='flex flex-wrap'>
-                    {posts.map((post)=>(
-                        <div key={post.$id} className="p-2 w-1/4">
-                            <PostCard {...post}/>
-                        </div>
-                    ))}
+                <div className="flex flex-wrap">
+                    {posts.map((post, idx) => {
+                        const isLast = idx === posts.length - 1;
+                        return (
+                            <div
+                                ref={isLast ? lastPostRef : null}
+                                key={post.$id}
+                                className="p-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
+                            >
+                                <PostCard {...post} />
+                            </div>
+                        );
+                    })}
                 </div>
+
+                {/* Loader */}
+                {loading && (
+                    <div className="flex justify-center items-center py-4 w-full">
+                        <div className="w-6 h-6 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                )}
             </Container>
         </div>
     </>

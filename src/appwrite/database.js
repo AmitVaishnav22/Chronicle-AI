@@ -174,9 +174,13 @@ export class Service{
         }
     }
 
-    async getPosts(sortBy){
+    async getPosts(sortBy,limit,offset){
         try {
-            let queries = [Query.equal("status", "active")];
+            let queries = [
+                Query.equal("status", "active"),
+                Query.limit(limit),
+                Query.offset(offset)
+            ];
     
             if (sortBy === "new") {
                 queries.push(Query.orderDesc("$createdAt"));
