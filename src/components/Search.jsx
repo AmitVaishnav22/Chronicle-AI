@@ -7,18 +7,41 @@ const SearchBar = () => {
     const [query, setQuery] = useState(""); 
     const [showRecent, setShowRecent] = useState(false);
     const [recentSearch, setRecentSearch] = useState([]); 
+    const [searchResults, setSearchResults] = useState([]);
 
-    const postsData = useSelector((state) => state.posts) 
+    //const postsData = useSelector((state) => state.posts) 
     const userData = useSelector((state) => state.auth.userData)
     //console.log(userData)
 
     const navigate = useNavigate();
 
-    const posts = postsData.documents || [];
+    //const posts = postsData.documents || [];
 
     //console.log(posts)
 
-    const filteredPosts = posts.filter((post) =>
+    useEffect(()=>{
+        const delayDebounce=setTimeout(()=>{
+            const fetchResults=async()=>{
+                if(query.trim() === "") {
+                    setSearchResults([]);
+                    return;
+                }
+                try {
+
+                    const results = await service.searchPosts(query.trim());
+                    console.log("Search results:", results);
+                    setSearchResults(results?.documents || []);
+                } catch (error) {
+                    console.error("Error fetching search results:", error);
+                    setSearchResults([]);
+                }
+            }
+            fetchResults();
+        },300);
+        return () => clearTimeout(delayDebounce);
+    },[query])
+
+    const filteredPosts = searchResults.filter((post) =>
         post.title.toLowerCase().includes(query.toLowerCase())
     );
 
@@ -27,9 +50,10 @@ const SearchBar = () => {
         try {
             const existing = await service.checkSearchHistory(userData.$id, id);
             if (!existing) {
-                const post = posts.find((post) => post.$id === id);
+                const post = searchResults.find((post) => post.$id === id);
                 const postTitle = post ? post.title : searchText;
-                await service.createSearchHistory(userData.$id, searchText, id, postTitle);
+                const author = post ? post.userName : "Unknown";
+                await service.createSearchHistory(userData.$id, searchText, id, postTitle,author);
             }
         } catch (error) {
             console.error("Error handling title click:", error);
@@ -92,7 +116,12 @@ const SearchBar = () => {
                             
                             onClick={() => handleRecentClick(item)}
                         >
-                            {item.postTitle}
+                            <div className="font-semibold ">{item.postTitle}</div>
+                            <div className="text-sm text-purple-300">
+                                Author: {item.author || "Unknown"}
+                            </div>
+                            {/* {item.postTitle}
+                            {item.author ? `author : (${item.author})` : ""} */}
                         </span>
                         <button
                             onClick={() => deleteRecentSearch(item.$id)}
@@ -115,7 +144,10 @@ const SearchBar = () => {
                             className="p-2 border-b border-purple-700 text-purple-400 hover:bg-purple-800 hover:text-white cursor-pointer"
                             onClick={() => handleTitleClick(post.$id)}
                         >
-                            {post.title}
+                            <div className="font-semibold ">{post.title}</div>
+                            <div className="text-sm text-purple-500">
+                                Author: {post.userName || "Unknown"}
+                            </div>
                         </div>
                     ))
                 ) : (

@@ -80,7 +80,7 @@ export class AuthService{
     } 
     async logout(){
         try {
-            return await this.account.deleteSessions()
+            return await this.account.deleteSessions('current')
         } catch (error) {
             throw error;
         }

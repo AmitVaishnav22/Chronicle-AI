@@ -174,7 +174,7 @@ export class Service{
         }
     }
 
-    async getPosts(sortBy,limit,offset){
+    async getPosts(sortBy,limit,offset) {
         try {
             let queries = [
                 Query.equal("status", "active"),
@@ -200,6 +200,25 @@ export class Service{
             return false
         } 
     }
+    async searchPosts(searchQuery, limit = 10) {
+        try {
+            const queries = [
+                Query.equal("status", "active"),
+                Query.search("title", searchQuery),
+                Query.limit(limit),
+            ];
+
+            return await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteCollectionId,
+                queries
+            );
+        } catch (error) {
+            console.log("Appwrite service :: searchPosts :: error", error);
+            return false;
+        }
+    }
+
     async getUserPosts(queries){
         
         try {
@@ -399,7 +418,7 @@ export class Service{
         }
     }
 
-    async createSearchHistory(userId, searchText,postId,postTitle) {
+    async createSearchHistory(userId, searchText,postId,postTitle,author) {
         
         try {
             return await this.databases.createDocument(
@@ -411,6 +430,7 @@ export class Service{
                     query:searchText.trim(),
                     postId:postId,
                     postTitle:postTitle,
+                    author:author,
                 }
                 
             );
