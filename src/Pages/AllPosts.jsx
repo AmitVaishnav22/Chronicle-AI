@@ -20,12 +20,12 @@ function AllPosts(){
         try {
             setLoading(true);
             const result = await service.getPosts(sortOption,LIMIT,offset); 
-            //console.log(result.documents);
+            console.log(result.documents);
     
             if (result) {
                 const newPosts = result.documents;
                 setPosts((prev)=>[...prev,...newPosts]);
-                dispatch(setPosts([...posts,...newPosts]));
+                //dispatch(setPosts([...posts,...newPosts]));
                 setHasMore(newPosts.length === LIMIT);
             }
         } catch (error) {
@@ -36,15 +36,15 @@ function AllPosts(){
         }
     };
     useEffect(() => {
-        // Reset when sort changes
+    // Reset everything when sort option changes
         setPosts([]);
         setPage(0);
         setHasMore(true);
     }, [sortOption]);
 
     useEffect(() => {
-        fetchPosts(sortOption,0); //currently due to less posts , we will be setting offset to 0
-    }, [sortOption,page]);
+        fetchPosts(sortOption, page * LIMIT);
+    }, [page, sortOption]);
 
     const lastPostRef= useCallback((node)=>{
         if (observer.current) observer.current.disconnect();
@@ -74,16 +74,16 @@ function AllPosts(){
                     <option value="old">Oldest Posted</option>
                 </select>
             </div>
-        <div className="w-full py-8">
+        <div className="">
             <Container>
-                <div className="flex flex-wrap">
+                <div>
                     {posts.map((post, idx) => {
                         const isLast = idx === posts.length - 1;
+
                         return (
-                            <div
+                            <div className="mb-4"
                                 ref={isLast ? lastPostRef : null}
                                 key={post.$id}
-                                className="p-2 w-full sm:w-1/2 md:w-1/3 lg:w-1/4"
                             >
                                 <PostCard {...post} />
                             </div>

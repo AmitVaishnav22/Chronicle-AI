@@ -14,8 +14,10 @@ function Header() {
         { name: "Login", slug: "/login", active: !authStatus },
         { name: "Signup", slug: "/signup", active: !authStatus },
         { name: "Feed", slug: "/all-posts", active: authStatus },
+        { name: "News", slug: "/trending-news",active : true},
         { name: "Add Post", slug: "/add-post", active: authStatus },
         {name: "BlogAI", slug:"/chronicle-ai",active: authStatus ,isLogo:true }
+
         
     ];
 

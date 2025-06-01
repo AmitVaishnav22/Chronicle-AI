@@ -8,6 +8,7 @@ const config={
     appwriteBookmarkId:String(import.meta.env.VITE_APPWRITE_BOOKMARK_ID),
     appwriteUserId:String(import.meta.env.VITE_APPWRITE_USER_ID),
     appwriteRecentSearchId:String(import.meta.env.VITE_APPWRITE_RECENT_SEARCH_ID),
+    newsApiKey:String(import.meta.env.VITE_NEWS_API_KEY),
 }
 
 export default config   

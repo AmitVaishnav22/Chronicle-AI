@@ -40,9 +40,9 @@ function LikedPost({userId:propUserId}) {
                 {loading ? (
                     <div className="text-center text-gray-500 py-4">Loading liked posts...</div>
                 ) : posts.length > 0 ? (
-                    <div className="flex flex-wrap">
+                    <div className="gap-4">
                         {posts.map((post) => (
-                            <div key={post.$id} className="p-2 w-1/4">
+                            <div key={post.$id}>
                                 <PostCard {...post} />
                             </div>
                         ))}

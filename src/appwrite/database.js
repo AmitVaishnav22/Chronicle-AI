@@ -181,7 +181,7 @@ export class Service{
                 Query.limit(limit),
                 Query.offset(offset)
             ];
-    
+            console.log("sortBy",sortBy)
             if (sortBy === "new") {
                 queries.push(Query.orderDesc("$createdAt"));
             } else if (sortBy === "popular") {
@@ -190,11 +190,13 @@ export class Service{
                 queries.push(Query.orderAsc("$createdAt"));
             }
     
-            return await this.databases.listDocuments(
+            const docs=await this.databases.listDocuments(
                 config.appwriteDataBaseId,
                 config.appwriteCollectionId,
                 queries
             );
+            console.log("docs",docs)
+            return docs;
         } catch (error) {
             console.log("Appwrite serive :: getPosts :: error", error);
             return false

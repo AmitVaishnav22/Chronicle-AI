@@ -17,6 +17,7 @@ import ChatComponent from './components/BlogAI/BlogAI.jsx'
 import Bookmarks from './Pages/Bookmarks.jsx'
 import LikedPost from './Pages/LikedPost.jsx'
 import UserInfo from "./Pages/UserInfo.jsx"
+import TrendingNews from "./Pages/News/TrendingNews.jsx"
 
 const router=createBrowserRouter([
   {
@@ -107,7 +108,12 @@ const router=createBrowserRouter([
       {
         path:'/user-info/:userId',
         element:<UserInfo/>
+      },
+      {
+        path:'/trending-news',
+        element:<TrendingNews/>
       }
+
     ]
 
   }
