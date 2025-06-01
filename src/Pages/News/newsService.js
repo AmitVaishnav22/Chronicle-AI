@@ -1,5 +1,5 @@
 import axios from 'axios';
-import config from "../config/config";
+import config from "../../config/config.js";
  
 const API_KEY =  config.newsApiKey;
 const BASE_URL = 'https://newsapi.org/v2';
