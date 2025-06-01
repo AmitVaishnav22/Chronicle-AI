@@ -89,11 +89,11 @@ function TrendingNews() {
                             className="border rounded-md p-4 shadow-md bg-gray-800"
                         >
                             <h3 className="text-lg text-white font-semibold">{article.title}</h3>
-                            <h3 className="text-sm text-purple-300 font-semibold">By {article.author || "Unknown"}</h3>
+                            <h3 className="text-sm text-purple-300 font-semibold">Source : {article.source.name || "Unknown"}</h3>
 
-                            {article.urlToImage && (
+                            {article.image && (
                                 <img
-                                    src={article.urlToImage}
+                                    src={article.image}
                                     alt=""
                                     className="my-2 w-full h-50 object-cover rounded"
                                 />
