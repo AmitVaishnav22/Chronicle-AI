@@ -43,7 +43,7 @@ function AllPosts(){
     }, [sortOption]);
 
     useEffect(() => {
-        fetchPosts(sortOption, page * LIMIT);
+        fetchPosts(sortOption,0); //currently fetching posts with offset 0
     }, [page, sortOption]);
 
     const lastPostRef= useCallback((node)=>{

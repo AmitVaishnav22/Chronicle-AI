@@ -420,7 +420,7 @@ export class Service{
         }
     }
 
-    async createSearchHistory(userId, searchText,postId,postTitle,author) {
+    async createSearchHistory(userId, searchText,postId,postTitle,author,featuredImg) {
         
         try {
             return await this.databases.createDocument(
@@ -433,6 +433,7 @@ export class Service{
                     postId:postId,
                     postTitle:postTitle,
                     author:author,
+                    featuredImg:featuredImg
                 }
                 
             );

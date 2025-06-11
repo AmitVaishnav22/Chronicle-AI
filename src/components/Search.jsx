@@ -53,7 +53,8 @@ const SearchBar = () => {
                 const post = searchResults.find((post) => post.$id === id);
                 const postTitle = post ? post.title : searchText;
                 const author = post ? post.userName : "Unknown";
-                await service.createSearchHistory(userData.$id, searchText, id, postTitle,author);
+                const featuredImg=post? post.featuredImg : "";
+                await service.createSearchHistory(userData.$id, searchText, id, postTitle,author,featuredImg);
             }
         } catch (error) {
             console.error("Error handling title click:", error);
@@ -72,7 +73,7 @@ const SearchBar = () => {
     const deleteRecentSearch = async (id) => {
         try {
             await service.deleteSearchHistoryItem(id);
-            console.log("Deleted recent search:", id);
+           // console.log("Deleted recent search:", id);
             fetchRecentSearch();
         } catch (error) {
             console.error("Error deleting recent search:", error);
@@ -112,20 +113,25 @@ const SearchBar = () => {
                         key={item.$id}
                         className="flex justify-between items-center px-3 py-2 border-b border-purple-700 text-purple-400 hover:bg-purple-800"
                     >
-                        <span
-                            
-                            onClick={() => handleRecentClick(item)}
-                        >
-                            <div className="font-semibold ">{item.postTitle}</div>
+                        {/* Left side: post title and author */}
+                        <span onClick={() => handleRecentClick(item)} className="flex flex-col">
+                            <div className="font-semibold">{item.postTitle}</div>
                             <div className="text-sm text-purple-300">
-                                Author: {item.author || "Unknown"}
+                            Author: {item.author || "Unknown"}
                             </div>
-                            {/* {item.postTitle}
-                            {item.author ? `author : (${item.author})` : ""} */}
                         </span>
+
+                        {/* Right side: image preview */}
+                        <div className="ml-auto">
+                            <img
+                            src={service.getFilePreview(item.featuredImg)}
+                            alt="Preview"
+                            className="w-14 h-10 object-cover rounded" 
+                            />
+                        </div>
                         <button
                             onClick={() => deleteRecentSearch(item.$id)}
-                            className="text-red-400 hover:text-white"
+                            className="ml-4 text-red-400 hover:text-white"
                         >
                             ✕
                         </button>
@@ -140,15 +146,29 @@ const SearchBar = () => {
                 {filteredPosts.length > 0 ? (
                     filteredPosts.map((post) => (
                         <div
-                            key={post.$id}
-                            className="p-2 border-b border-purple-700 text-purple-400 hover:bg-purple-800 hover:text-white cursor-pointer"
-                            onClick={() => handleTitleClick(post.$id)}
-                        >
-                            <div className="font-semibold ">{post.title}</div>
-                            <div className="text-sm text-purple-500">
-                                Author: {post.userName || "Unknown"}
-                            </div>
+                    key={post.$id}
+                    className="p-2 border-b border-purple-700 text-purple-400 hover:bg-purple-800 hover:text-white cursor-pointer"
+                    onClick={() => handleTitleClick(post.$id)}
+                    >
+                    <div className="flex items-center justify-between">
+                        {/* Left side: Title and Author */}
+                        <div>
+                        <div className="font-semibold">{post.title}</div>
+                        <div className="text-sm text-purple-500">
+                            Author: {post.userName || "Unknown"}
                         </div>
+                        </div>
+
+                        {/* Right side: Image Preview */}
+                        <div className="ml-4">
+                        <img
+                            src={service.getFilePreview(post.featuredImg)}
+                            alt="Preview"
+                            className="w-14 h-10 object-cover rounded"
+                        />
+                        </div>
+                    </div>
+                    </div>
                     ))
                 ) : (
                     <p className="p-2 text-purple-500">No posts found</p>
