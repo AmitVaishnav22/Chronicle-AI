@@ -489,6 +489,86 @@ export class Service{
         }
     }
 
+    async searchUsers(searchQuery, limit = 10) {
+        try {
+            const queries = [
+                Query.search("name", searchQuery),
+                Query.limit(limit),
+            ];
+    
+            return await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteUserId,
+                queries
+            );
+        } catch (error) {
+            console.error("Error searching users:", error);
+            throw error;
+        }
+    }
+    async createUserSearchHistory(userId, userData) {
+        try {
+            return await this.databases.createDocument(
+                config.appwriteDataBaseId,
+                config.appwriteUserSearchHistoryId,
+                ID.unique(),
+                {
+                    userId: userId,
+                    ...userData
+                }
+            );
+        } catch (error) {
+            console.error("Error creating user search history:", error);
+            throw error;
+        }
+    }
+    async checkUserSearchHistory(userId, currentUserId) {
+        try {
+            //console.log("Checking search history for userId:", userId, "by currentUserId:", currentUserId);
+            const response = await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteUserSearchHistoryId,
+                [
+                    Query.equal("userId", currentUserId),
+                    Query.equal("SearchedUserId", userId),
+                ]
+            );
+            console.log("response",response)
+            return response.documents.length > 0; 
+        } catch (error) {
+            console.error("Error checking user search history:", error);
+            throw error;
+        }
+    }
+    async getUserSearchHistory(userId) {
+        try {
+            return await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteUserSearchHistoryId,
+                [
+                    Query.equal("userId", userId),
+                    Query.orderDesc("$createdAt")
+                ],
+                100
+            );
+        } catch (error) {
+            console.error("Error fetching user search history:", error);
+            throw error;
+        }
+    }
+    async deleteUserSearchHistoryItem(searchId) {
+        try {
+            return await this.databases.deleteDocument(
+                config.appwriteDataBaseId,
+                config.appwriteUserSearchHistoryId,
+                searchId
+            );
+        } catch (error) {
+            console.error("Error deleting user search history item:", error);
+            throw error;
+        }
+    }
+
 }
 
 const service=new Service();

@@ -10,6 +10,7 @@ const config={
     appwriteRecentSearchId:String(import.meta.env.VITE_APPWRITE_RECENT_SEARCH_ID),
     newsApiKey:String(import.meta.env.VITE_NEWSAPI_KEY),
     newsApiUrl:String(import.meta.env.VITE_NEWSAPI_URL),
+    appwriteUserSearchHistoryId:String(import.meta.env.VITE_APPWRITE_RECENT_USERSEARCH_ID),
 }
 
 export default config   

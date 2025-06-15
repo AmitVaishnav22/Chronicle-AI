@@ -18,6 +18,7 @@ import Bookmarks from './Pages/Bookmarks.jsx'
 import LikedPost from './Pages/LikedPost.jsx'
 import UserInfo from "./Pages/UserInfo.jsx"
 import TrendingNews from "./Pages/News/TrendingNews.jsx"
+import SearchUser from './Pages/searchUser.jsx'
 
 const router=createBrowserRouter([
   {
@@ -112,6 +113,10 @@ const router=createBrowserRouter([
       {
         path:'/trending-news',
         element:<TrendingNews/>
+      },
+      {
+        path:'/search-user',
+        element:<SearchUser/>
       }
 
     ]

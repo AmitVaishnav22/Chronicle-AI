@@ -14,9 +14,10 @@ function Header() {
         { name: "Login", slug: "/login", active: !authStatus },
         { name: "Signup", slug: "/signup", active: !authStatus },
         { name: "Feed", slug: "/all-posts", active: authStatus },
-        { name: "News", slug: "/trending-news",active : true},
         { name: "Add Post", slug: "/add-post", active: authStatus },
-        {name: "BlogAI", slug:"/chronicle-ai",active: authStatus ,isLogo:true }
+        { name: "Search", slug: "/search-user", active: authStatus , icon: "https://thumbs.dreamstime.com/b/search-user-simple-icon-profile-avatar-magnifying-glass-sign-male-person-silhouette-symbol-circle-flat-button-shadow-vector-117264258.jpg" ,isLogo: true },
+        { name: "News", slug: "/trending-news",active : true, icon:"https://th.bing.com/th/id/OIP.EGNzjKdYpHfthDMpp1pkuAHaHa?cb=thvnextc1&rs=1&pid=ImgDetMain"},
+        {name: "BlogAI", slug:"/chronicle-ai",active: authStatus ,icon: "https://images.ctfassets.net/kftzwdyauwt9/2i61iTTUDpWjwTbl6cdJkL/a60bb9ad83127262f5022aabcede01a6/DON-T_add_any_colors_to_the_Blossom.png?w=1080&q=90&fm=webp", isLogo:true }
 
         
     ];
@@ -27,7 +28,7 @@ function Header() {
         setTimeout(() => setLoading(false), 500);  
     };
 
-    return (
+     return (
         <header className="top-0 z-50">
             <Container>
                 <nav className="flex">
@@ -36,20 +37,19 @@ function Header() {
                             <Logo width="70px" />
                         </Link>
                     </div>
-
                     <ul className="flex ml-auto">
                         {navItem.map((item) =>
                             item.active ? (
                                 <li key={item.name} className="mx-2">
-                                    {item.isLogo ? (
+                                    {item.icon ? (
                                         <button
                                             onClick={() => handleNavigation(item.slug)}
                                             className="flex items-center bottom-0"
                                         >
                                             <img
-                                                src="https://cdn-icons-png.flaticon.com/512/9938/9938623.png" 
+                                                src={item.icon} 
                                                 alt="BlogAI"
-                                                className="h-10" 
+                                                className="h-10 w-10 rounded-full object-cover" 
                                             />
                                         </button>
                                     ) : (
@@ -76,5 +76,6 @@ function Header() {
         </header>
     );
 }
+
 
 export default Header;
