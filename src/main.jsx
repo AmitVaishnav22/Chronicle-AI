@@ -19,6 +19,7 @@ import LikedPost from './Pages/LikedPost.jsx'
 import UserInfo from "./Pages/UserInfo.jsx"
 import TrendingNews from "./Pages/News/TrendingNews.jsx"
 import SearchUser from './Pages/searchUser.jsx'
+import LeaderBoard from './Pages/LeaderBoard.jsx'
 
 const router=createBrowserRouter([
   {
@@ -117,6 +118,10 @@ const router=createBrowserRouter([
       {
         path:'/search-user',
         element:<SearchUser/>
+      },
+      {
+        path:'/leaderboard',
+        element:<LeaderBoard/>
       }
 
     ]
