@@ -19,9 +19,9 @@ function Home() {
             <span className="absolute top-2 right-2 text-xs bg-yellow-400 text-black px-2 py-0.5 rounded font-semibold">
                 NEW
             </span>
-            <h3 className="text-xl font-bold text-purple-400">Real-Time Speech Highlighting</h3>
-            <p className="text-gray-300 mt-2">
-                Follow along as the article is read aloud with live word-by-word highlighting.
+            <h3 className="text-xl font-bold text-red-400">Rate your favorite authors and see who’s on the top every month !</h3>
+            <p className="text-red-300 mt-2">
+                LIVE NOW , start rating your favorite authors and help them climb the leaderboard!
             </p>
         </div>}
         

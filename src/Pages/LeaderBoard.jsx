@@ -8,9 +8,10 @@ function LeaderBoard() {
           🏆 Top Rated Authors Leaderboard
         </h1>
         <p className="text-base md:text-lg text-gray-300 mb-6 text-center max-w-2xl leading-relaxed animate-fadeIn delay-200">
-          Rate your favorite authors and see who’s on the top every month! <br />
+          Rate your favorite authors and see who’s on the top every month ! <br />
           Voting resets on the <span className="text-violet-400 font-semibold">1st of each month</span>. <br />
-          <span className="text-pink-400 font-semibold">Your votes matter!</span>
+          <span className="text-pink-400 font-semibold">Your votes matter !</span><br />
+          <span className="text-red-400 font-semibold"> LIVE NOW , start rating your favorite authors and help them climb the leaderboard!</span>
         </p>
         <p className="text-xl text-violet-300 font-bold mb-8 animate-bounce">🚧 Coming Soon 🚧</p>
         <img

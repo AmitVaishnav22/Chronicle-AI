@@ -11,11 +11,14 @@ import LikedPost from "./LikedPost.jsx";
 import YourPosts from "./YourPosts.jsx";
 import Drafts from "./Drafts";
 import Bookmarks from "./Bookmarks";
+import ReactStars from "react-rating-stars-component";
+
 
 export default function UserInfo() {
     const { userId } = useParams(); 
     const dispatch = useDispatch();
     const authUser = useSelector((state) => state.auth?.userData);
+    
     const isCurrentUser = authUser?.$id === userId;
 
     const [profileUser, setProfileUser] = useState(null);
@@ -26,6 +29,8 @@ export default function UserInfo() {
     const [editMode, setEditMode] = useState(false);
     const [hasChanges, setHasChanges] = useState(false);
     const [posts, setPosts] = useState([]);
+    const [rating, setRating] = useState(0);
+    const [hasRated, setHasRated] = useState(false);
 
     const tabs = [
         { id: "posts", label: "Posts" },
@@ -108,6 +113,42 @@ export default function UserInfo() {
             setUpdating(false);
         }
     };
+    /** Check if user has already rated **/
+    useEffect(() => {
+    const checkIfAlreadyRated = async () => {
+        if (!authUser || !userId || authUser.$id === userId) return;
+
+        try {
+        const ratings = await service.getRatingsForUser(authUser.$id, userId);
+        console.log("Ratings for user:", ratings);
+        if (!ratings || ratings.documents.length === 0) {
+            setHasRated(false);
+            return;
+        }
+        setHasRated(true);
+        } catch (err) {
+        console.error("Error checking rating status:", err);
+        }
+    };
+
+    checkIfAlreadyRated();
+    }, [authUser, userId]);
+
+    /** Handle rating submission **/
+    const handleRatingSubmit = async () => {
+        if (!authUser || !rating) return;
+        try {
+
+            await service.submitRating(authUser.$id, userId, rating);
+            await service.updateUserRating(userId, rating);
+            setHasRated(true);
+            setRating(0);
+
+        } catch (err) {
+            console.error("Error submitting rating:", err);
+        }
+    };
+
 
     if (!profileUser) return <p>Loading user profile...</p>;
 
@@ -121,6 +162,7 @@ export default function UserInfo() {
                         alt={profileUser?.name} 
                         className="w-full h-full rounded-full object-cover border-4 border-purple-600" 
                     />
+                    
                     {isCurrentUser && (
                         <label className="absolute bottom-2 right-2 bg-black/80 p-2 rounded-full cursor-pointer hover:bg-black transition-all">
                             <Pencil className="w-5 h-5 text-white" />
@@ -133,15 +175,55 @@ export default function UserInfo() {
                         </label>
                     )}
                 </div>
+                {!isCurrentUser && (
+                <div className="mt-0 p-1 rounded-lg shadow-md transition-all duration-300 animate-fadeIn">
+                    {hasRated ? (
+                    <p className="text-green-400 font-medium flex items-center gap-1">
+                        Your rating has been recorded. Thank you! You can vote again next month.
+                    </p>
+                    ) : (
+                    <>
+                        <h4 className="text-gray-200 text-lg mb-0 font-semibold">
+                        Rate {profileUser.name} for{" "}
+                        <span className="font-bold">
+                            {new Date().toLocaleString('default', { month: 'long' })}
+                        </span>
+                        :
+                        </h4>
+
+                        <div className="transition-transform duration-200 hover:scale-105 ml-2">
+                        <ReactStars
+                            count={5}
+                            size={32}
+                            value={rating}
+                            onChange={(newRating) => setRating(newRating)}
+                            activeColor="#a855f7"
+                        />
+                        </div>
+
+                        <Button
+                        onClick={handleRatingSubmit}
+                        className="mt-3 bg-purple-600 hover:bg-purple-700 px-4 py-1 text-sm transition-all duration-200"
+                        disabled={rating === 0}
+                        >
+                        Submit Rating
+                        </Button>
+                    </>
+                    )}
+                </div>
+                )}
+
 
                 {/* User Info Section */}
                 <div className="flex-1 space-y-4">
+                    
                     <h1 className="text-4xl font-bold">{profileUser?.name}</h1>
                     <h1 className="text-4xl font-bold">{profileUser?.email}</h1>
                     <p className="text-gray-300 text-lg">Joined: {profileUser?.$createdAt ? new Date(profileUser.$createdAt).toDateString() : "N/A"}</p>
-
+                    <p className="text-gray-300 text-lg">Users Rated {profileUser?.name} this month : {profileUser.ratedByCount}</p>
                     {/* Bio Section */}
-                    <div className="space-y-2">
+            
+                   <div className="space-y-2">
                         {isCurrentUser ? (
                             editMode ? (
                                 <input

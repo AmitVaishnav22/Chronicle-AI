@@ -11,6 +11,8 @@ const config={
     newsApiKey:String(import.meta.env.VITE_NEWSAPI_KEY),
     newsApiUrl:String(import.meta.env.VITE_NEWSAPI_URL),
     appwriteUserSearchHistoryId:String(import.meta.env.VITE_APPWRITE_RECENT_USERSEARCH_ID),
+    appwriteTopRatedHistoryId:String(import.meta.env.VITE_APPWRITE_TOPRATEDHISTORY_ID),
+    appwriteRatingsId:String(import.meta.env.VITE_APPWRITE_RATING_ID),
 }
 
 export default config   

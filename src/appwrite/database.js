@@ -569,6 +569,63 @@ export class Service{
         }
     }
 
+    async submitRating(fromUser, toUser, rating) {
+        const now = new Date();
+        const month = `01-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+        try {
+            const response = await this.databases.createDocument(
+                config.appwriteDataBaseId,
+                config.appwriteRatingsId,
+                ID.unique(),
+                {
+                    fromUser: fromUser,
+                    toUser: toUser,
+                    rating: rating,
+                    month: month,
+                }
+            );
+            return response;
+        } catch (error) {
+            console.error("Error submitting rating:", error);
+            throw error;
+        }
+    }
+    async getRatingsForUser(fromUserId, toUserId) {
+        try {
+            return await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteRatingsId,
+                [
+                    Query.equal("toUser", toUserId),
+                    Query.equal("fromUser", fromUserId),
+                    Query.orderDesc("$createdAt")
+                ],
+                100
+            );
+        } catch (error) {
+            console.error("Error fetching ratings for user:", error);
+            throw error;
+        }
+    }
+
+    async updateUserRating(userId, newRating) {
+        const user = await authService.getUserById(userId);
+        if (!user) {
+            throw new Error("User not found");
+        }
+        const newTotal = (user.totalRatings || 0) + newRating;
+        const newCount = (user.ratedByCount || 0) + 1;
+        return await this.databases.updateDocument(
+            config.appwriteDataBaseId,
+            config.appwriteUserId,
+            userId,
+            {
+                totalRatings: newTotal,
+                ratedByCount: newCount,
+            }
+        )
+    }
+
 }
 
 const service=new Service();
