@@ -625,6 +625,21 @@ export class Service{
             }
         )
     }
+    async getRandomUsers(limit){
+        try {
+            return await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteUserId,
+                [
+                    Query.limit(limit),
+                    Query.orderDesc("ratedByCount"),
+                ]
+            )
+            
+        } catch (error) {
+            
+        }
+    }
 
 }
 

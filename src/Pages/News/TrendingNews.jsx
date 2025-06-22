@@ -18,6 +18,7 @@ function TrendingNews() {
     const [selectedRegion, setSelectedRegion] = useState("us");
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
     const observer = useRef();
 
     // Fetch news on category/region change
@@ -29,9 +30,11 @@ function TrendingNews() {
 
     useEffect(() => {
         const fetchNews = async () => {
+            setLoading(true);
             const data = await getTrendingNews(selectedCategory, selectedRegion, page);
             setArticles((prev) => [...prev, ...data]);
             if (data.length < LIMIT) setHasMore(false);
+            setLoading(false);
         };
         fetchNews();
     }, [page, selectedCategory, selectedRegion]);
@@ -78,7 +81,11 @@ function TrendingNews() {
                     ))}
                 </select>
             </div>
-
+            {loading && (
+                <div className="flex justify-center items-center py-4 w-full">
+                    <div className="w-6 h-6 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                )}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {articles.map((article, index) => {
                     const isLast = index === articles.length - 1;

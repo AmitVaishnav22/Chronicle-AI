@@ -7,6 +7,7 @@ const SearchUser = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [recentSearches, setRecentSearches] = useState([]);
+  const [suggestedAuthors, setSuggestedAuthors] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const userData = useSelector((state) => state.auth.userData);
@@ -17,7 +18,17 @@ const SearchUser = () => {
     if (userData?.$id) {
       fetchRecentSearches();
     }
+    fetchSuggestedAuthors();
   }, [userData]);
+  // Fetch suggested authors
+  const fetchSuggestedAuthors = async () => {
+    try {
+      const response = await service.getRandomUsers(3); // implement this in your backend/service
+      setSuggestedAuthors(response.documents || []);
+    } catch (error) {
+      console.error("Error fetching suggested authors:", error);
+    }
+  };
 
   const fetchRecentSearches = async () => {
     try {
@@ -165,6 +176,35 @@ const SearchUser = () => {
 
         {!loading && searchQuery && searchResults.length === 0 && (
           <p className="text-center text-purple-400 text-xl mt-12">No users found.</p>
+        )}
+        {/* Suggested Authors */}
+        {!loading && searchQuery === "" && suggestedAuthors.length > 0 && (
+          <div className="mt-10">
+            <h2 className="text-xl font-semibold text-purple-300 mb-5">Suggested Authors (MOST POPULARLY RATED)</h2>
+            <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {suggestedAuthors.map((user) => (
+                <li
+                  key={user.$id}
+                  className="flex items-center bg-gray-800 hover:bg-gray-700 p-4 rounded-xl cursor-pointer transition"
+                  onClick={() => handleUserClick(user.$id, user.name, user.userprofile)}
+                >
+                  <img
+                    src={
+                      user.userprofile
+                        ? service.getFilePreview(user.userprofile)
+                        : "https://i.pinimg.com/736x/5d/69/42/5d6942c6dff12bd3f960eb30c5fdd0f9.jpg"
+                    }
+                    alt={user.name}
+                    className="w-14 h-14 rounded-full object-cover mr-4"
+                  />
+                  <div>
+                    <p className="text-lg font-semibold">{user.name}</p>
+                    <p className="text-sm text-purple-400">{user.bio || "Tech Enthusiast"}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </div>
