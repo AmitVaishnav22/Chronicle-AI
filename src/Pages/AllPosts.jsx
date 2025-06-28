@@ -20,7 +20,7 @@ function AllPosts(){
         try {
             setLoading(true);
             const result = await service.getPosts(sortOption,LIMIT,offset); 
-            console.log(result.documents);
+            //console.log(result.documents);
     
             if (result) {
                 const newPosts = result.documents;

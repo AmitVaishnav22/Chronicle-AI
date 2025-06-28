@@ -120,7 +120,7 @@ export default function UserInfo() {
 
         try {
         const ratings = await service.getRatingsForUser(authUser.$id, userId);
-        console.log("Ratings for user:", ratings);
+        // console.log("Ratings for user:", ratings);
         if (!ratings || ratings.documents.length === 0) {
             setHasRated(false);
             return;

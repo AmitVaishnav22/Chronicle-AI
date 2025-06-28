@@ -109,7 +109,11 @@ const router=createBrowserRouter([
       },
       {
         path:'/user-info/:userId',
-        element:<UserInfo/>
+        element:(
+          <Protected authentication={true}>
+            <UserInfo/>
+          </Protected>
+        )
       },
       {
         path:'/trending-news',

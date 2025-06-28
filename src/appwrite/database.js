@@ -641,6 +641,54 @@ export class Service{
         }
     }
 
+
+    async getTopRatedUsers(month) {
+    try {
+        const results = await this.databases.listDocuments(
+        config.appwriteDataBaseId,
+        config.appwriteTopRatedHistoryId,
+        [
+            Query.equal("month", month),
+            Query.limit(1),
+        ]
+        );
+
+        const document = results.documents[0];
+        //console.log("Raw topUsers array:", document.topUsers);
+
+        // Try parsing each user one by one, with error fallback
+        const parsedUsers = document.topUsers.map((userStr, index) => {
+        try {
+            return JSON.parse(userStr);
+        } catch (err) {
+            console.warn(`Skipping invalid JSON at index ${index}:`, userStr);
+            return null; 
+        }
+        }).filter(Boolean); // remove any nulls
+
+        return parsedUsers;
+    } catch (error) {
+        console.error("Error fetching top rated users:", error);
+        throw error;
+    }
+    }
+
+    async getAvailableMonths() {
+        try {
+            const response = await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteTopRatedHistoryId,
+                [
+                    Query.orderDesc("month")
+                ]
+            );
+            console.log("Available months response:", response);
+            return response.documents.map(doc => ({ month: doc.month }));
+        } catch (error) {
+            console.error("Error fetching available months:", error);
+            throw error;
+        }
+    }
 }
 
 const service=new Service();
