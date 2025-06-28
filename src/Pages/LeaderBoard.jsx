@@ -13,7 +13,7 @@ function LeaderBoard() {
   useEffect(()=>{
     const init=async()=>{
       const monthHistory= await service.getAvailableMonths();
-      console.log("monthHistory",monthHistory);
+      //console.log("monthHistory",monthHistory);
       setMonth(monthHistory);
       if(monthHistory.length>0){
         setSelectedMonth(monthHistory[0]);
@@ -26,11 +26,11 @@ function LeaderBoard() {
     setLoading(true);
     try {
       const topRated = await service.getTopRatedUsers(month);
-      console.log("topRated",topRated)
+      //console.log("topRated",topRated)
       setTopRatedUsers(topRated);
 
     } catch (error) {
-      console.error('Error fetching top rated users:', error);
+      //console.error('Error fetching top rated users:', error);
     } finally {
       setLoading(false);
     }
@@ -64,13 +64,18 @@ function LeaderBoard() {
           • Only authors with at least one rating are considered.<br />
           • Rankings refresh on the <span className="text-violet-400">1st of every month</span>.<br />
           • In case of a tie, the author with more votes ranks higher.<br />
-          <br />
+          <span className="text-yellow-400 font-semibold">How to rate an author :<br />
+          </span>
+            1. Visit the author's profile via search or feed.<br />
+            2. There will be rating button near author's profile.<br />
+            3. Select a rating from 1 to 5 stars.<br /> 
+            4. Submit your rating.<br />
           <span className="text-green-400 font-semibold">Vote regularly to support your favorite authors!</span>
         </p>
         <img
           src="https://www.pinclipart.com/picdir/big/54-540742_leaderboard-icon-free-download-leaderboard-icons-png-clipart.png"
           alt="Leaderboard Icon"
-          className="w-40 md:w-56 h-auto object-contain animate-pulse"
+          className="w-50 md:w-56 h-auto object-contain animate-pulse"
         />
       </div>
     </div>

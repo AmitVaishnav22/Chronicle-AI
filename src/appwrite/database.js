@@ -682,7 +682,7 @@ export class Service{
                     Query.orderDesc("month")
                 ]
             );
-            console.log("Available months response:", response);
+            //console.log("Available months response:", response);
             return response.documents.map(doc => ({ month: doc.month }));
         } catch (error) {
             console.error("Error fetching available months:", error);

@@ -38,7 +38,7 @@ function Header() {
                     <ul className="flex gap-8 flex-wrap">
                         {navItem.map((item) =>
                             item.active ? (
-                                <li key={item.name}>
+                                <li key={item.name} className="relative">
                                     <button
                                         onClick={() => handleNavigation(item.slug)}
                                         className={`flex items-center gap-2 px-2 py-1 transition-all duration-200
@@ -48,7 +48,13 @@ function Header() {
                                         `}
                                     >
                                         {item.name}
+                                    {item.name === "LeaderBoard" && (
+                                        <span className="absolute -top-2 -right-2 bg-red-400 text-white text-xs font-bold px-1.5 py-0.5 rounded">
+                                           NEW
+                                        </span>
+                                    )}
                                     </button>
+                                    
                                 </li>
                             ) : null
                         )}
