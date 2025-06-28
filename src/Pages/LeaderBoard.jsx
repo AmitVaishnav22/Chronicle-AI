@@ -121,8 +121,9 @@ function LeaderBoard() {
                 <div className="relative mb-4">
                   <img
                     src={
-                      service.getFilePreview(user?.userprofile) ||
-                      "https://i.pinimg.com/736x/5d/69/42/5d6942c6dff12bd3f960eb30c5fdd0f9.jpg"
+                      user.userprofile
+                        ? service.getFilePreview(user.userprofile)
+                        : "https://i.pinimg.com/736x/5d/69/42/5d6942c6dff12bd3f960eb30c5fdd0f9.jpg"
                     }
                     alt={user?.username}
                     className="w-24 h-24 rounded-full border-4 border-purple-500 object-cover mx-auto"
@@ -165,8 +166,9 @@ function LeaderBoard() {
                       <td className="px-4 py-3">
                         <img
                           src={
-                            service.getFilePreview(user?.userprofile) ||
-                            "https://i.pinimg.com/736x/5d/69/42/5d6942c6dff12bd3f960eb30c5fdd0f9.jpg"
+                            user.userprofile
+                              ? service.getFilePreview(user.userprofile)
+                              : "https://i.pinimg.com/736x/5d/69/42/5d6942c6dff12bd3f960eb30c5fdd0f9.jpg"
                           }
                           alt={user?.username}
                           className="w-10 h-10 rounded-full border-2 border-gray-500 object-cover"
