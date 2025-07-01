@@ -26,8 +26,9 @@ function LeaderBoard() {
     setLoading(true);
     try {
       const topRated = await service.getTopRatedUsers(month);
-      //console.log("topRated",topRated)
-      setTopRatedUsers(topRated);
+      const sortedRatings = topRated.sort((a, b) => a.rank - b.rank);
+      //console.log("topRated",sortedRatings)
+      setTopRatedUsers(sortedRatings);
 
     } catch (error) {
       //console.error('Error fetching top rated users:', error);
