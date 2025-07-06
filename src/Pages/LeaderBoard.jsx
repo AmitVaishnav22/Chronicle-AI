@@ -37,9 +37,12 @@ function LeaderBoard() {
     }
   }
   const handleMonthChange = (e) => {
-    const month=e.target.value;
-    setSelectedMonth(month);
-    loadTopRatedUsers(month);
+    const selected = month.find(m => m.month === e.target.value);
+    //console.log("selected month", selected);
+    if (selected) {
+      setSelectedMonth(selected);
+      loadTopRatedUsers(selected.month);
+    }
   }
 
   const handleUserClick = (userId) => {
@@ -86,7 +89,7 @@ function LeaderBoard() {
       {/* Month Selector & Title */}
       <h2 className="text-3xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 via-purple-500 to-pink-500 mb-4">
          Top Rated Authors for{" "}
-        {selectedMonth
+        {selectedMonth 
           ? new Date(selectedMonth.month).toLocaleString("default", {
               year: "numeric",
               month: "long",
@@ -95,7 +98,7 @@ function LeaderBoard() {
       </h2>
 
       <select
-        value={selectedMonth}
+        value={selectedMonth?.month || ""}
         onChange={handleMonthChange}
         className="mb-8 p-2 rounded bg-gray-800 text-white border border-gray-600"
       >

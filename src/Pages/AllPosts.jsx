@@ -4,6 +4,7 @@ import service from "../appwrite/database";
 import SearchBar from "../components/Search.jsx"
 import {  setPosts} from "../../src/store/postSlice.js"
 import { useDispatch } from "react-redux";
+import PromoCard from "../components/PromoCard.jsx";
 
 const LIMIT=8;
 
@@ -79,14 +80,17 @@ function AllPosts(){
                 <div>
                     {posts.map((post, idx) => {
                         const isLast = idx === posts.length - 1;
-
                         return (
-                            <div className="mb-4"
-                                ref={isLast ? lastPostRef : null}
-                                key={post.$id}
-                            >
-                                <PostCard {...post} />
-                            </div>
+                            <React.Fragment key={post.$id}>
+                                
+                                <div className="mb-4"
+                                    ref={isLast ? lastPostRef : null}
+                                    key={post.$id}
+                                >
+                                    <PostCard {...post} />
+                                </div>
+                                {idx >0  && idx % 4 === 0 && <PromoCard />}
+                            </React.Fragment>
                         );
                     })}
                 </div>

@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import {addPost,updatePost} from "../../store/postSlice.js"
 import ChatComponent from "../BlogAI/BlogAI.jsx";
+import PromoCard from "../PromoCard.jsx";
 
 export default function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
@@ -138,7 +139,7 @@ export default function PostForm({ post }) {
                     )}
                 </Button>
                 <div className="mt-4">
-                <ChatComponent/>
+                <PromoCard/>
                 </div>
             </div>
         </form>

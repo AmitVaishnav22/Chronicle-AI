@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PromoCard from "../components/PromoCard";
 
 function Home() {
     const navigate = useNavigate();
@@ -138,6 +139,7 @@ function Home() {
             </section>
 
             {/* Footer Section */}
+            <PromoCard/>
             <footer className="py-8 bg-gray-900 text-center">
                 <p className="text-gray-400">
                 Explore the source code on our <a href="https://github.com/AmitVaishnav22/Blogify/tree/main" className="text-purple-500 underline">GitHub repository</a>.

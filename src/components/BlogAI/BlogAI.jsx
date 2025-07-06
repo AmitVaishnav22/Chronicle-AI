@@ -125,7 +125,7 @@ const ChatComponent = () => {
       <div className="flex flex-col space-y-2">
         <textarea
           className="w-full p-3 bg-gray-800 text-white rounded-lg"
-          placeholder="Generate or summarize blog content with the help of Chronical AI..."
+          placeholder="Generate or summarize article content with the help of Chronical AI..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           rows={4}
