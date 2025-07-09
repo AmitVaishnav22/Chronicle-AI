@@ -14,6 +14,7 @@ function AllPosts(){
     const [page,setPage]=useState(0)
     const [hasMore,setHasMore]=useState(true)
     const [loading,setLoading]=useState(false)
+    const [ads,setAds]=useState([])
 
     const observer=React.useRef()
     const dispatch=useDispatch()
@@ -36,15 +37,28 @@ function AllPosts(){
             setLoading(false);
         }
     };
+    const fetchAds = async () => {
+        try {
+            const result = await service.getAllApprovedAds();
+            if (result) {
+                const newAds = result.documents;
+                setAds(newAds);
+            }
+        } catch (error) {
+            console.error("Error fetching ads:", error);
+        }
+    }
     useEffect(() => {
     // Reset everything when sort option changes
         setPosts([]);
         setPage(0);
+        setAds([]);
         setHasMore(true);
     }, [sortOption]);
 
     useEffect(() => {
         fetchPosts(sortOption,0); //currently fetching posts with offset 0
+        fetchAds();
     }, [page, sortOption]);
 
     const lastPostRef= useCallback((node)=>{
@@ -80,6 +94,8 @@ function AllPosts(){
                 <div>
                     {posts.map((post, idx) => {
                         const isLast = idx === posts.length - 1;
+                        const showAd = idx > 0 && idx % 4 === 0 && ads.length > 0;
+                        const ad = ads[Math.floor(idx / 4) % ads.length]; 
                         return (
                             <React.Fragment key={post.$id}>
                                 
@@ -89,7 +105,14 @@ function AllPosts(){
                                 >
                                     <PostCard {...post} />
                                 </div>
-                                {idx >0  && idx % 4 === 0 && <PromoCard />}
+                                {showAd  && ad && (
+                                    <PromoCard
+                                        id={ad.$id}
+                                        title={ad.title}
+                                        desciption={ad.description}
+                                        url={ad.url}
+                                    />
+                                )}
                             </React.Fragment>
                         );
                     })}

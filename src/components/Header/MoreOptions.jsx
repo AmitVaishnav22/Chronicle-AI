@@ -16,6 +16,7 @@ export default function MoreOptions() {
   const [userBio, setUserBio] = useState("");
 
   const options = [
+    { name: "ChronicleAds", slug: "/chronicle-ads" },
     { name: "Your Posts", slug: "/your-posts" },
     { name: "Drafts", slug: "/drafts" },
     { name: "Bookmarks", slug: "/bookmarks" },
@@ -116,6 +117,11 @@ export default function MoreOptions() {
                       className="block w-full text-left px-6 py-3 text-lg font-medium hover:bg-purple-600 rounded-lg transition duration-300"
                     >
                       {item.name}
+                      {item.name === "ChronicleAds" && (
+                        <span className="ml-2 text-xs bg-red-500 text-white px-2 py-0.5 rounded-full animate-pulse">
+                          New
+                        </span>
+                      )}
                     </button>
                   </li>
                 ))}

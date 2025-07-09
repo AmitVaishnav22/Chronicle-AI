@@ -12,6 +12,7 @@ import YourPosts from "./YourPosts.jsx";
 import Drafts from "./Drafts";
 import Bookmarks from "./Bookmarks";
 import ReactStars from "react-rating-stars-component";
+import UserAds from "./ChronicleAds/UserAds.jsx"; 
 
 
 export default function UserInfo() {
@@ -37,6 +38,7 @@ export default function UserInfo() {
         { id: "drafts", label: "Drafts" },
         { id: "bookmarks", label: "Bookmarks" },
         { id: "liked", label: "Liked Posts" },
+        { id: "chronicleads", label: "Chronicle Ads" }
     ];
 
     /** Fetch user's posts **/
@@ -260,7 +262,7 @@ export default function UserInfo() {
             <div className="border-t border-gray-800 pt-8">
                 <div className="flex gap-6 mb-8 overflow-x-auto pb-2">
                     {tabs.map((tab) => (
-                        isCurrentUser || !["drafts", "bookmarks"].includes(tab.id) ? (
+                        isCurrentUser || !["drafts", "bookmarks","chronicleads"].includes(tab.id) ? (
                             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
                                 className={`px-4 py-2 text-lg font-medium ${activeTab === tab.id ? "text-purple-400 border-b-2 border-purple-400" : "text-gray-400 hover:text-gray-200"}`}
                             >
@@ -274,6 +276,7 @@ export default function UserInfo() {
                     {activeTab === "liked" && <LikedPost userId={userId} />}
                     {activeTab === "drafts" && isCurrentUser && <Drafts />}
                     {activeTab === "bookmarks" && <Bookmarks />}
+                    {activeTab === "chronicleads" && <UserAds />}
                 </div>
             </div>
         </div>

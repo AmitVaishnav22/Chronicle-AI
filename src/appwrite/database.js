@@ -2,7 +2,7 @@ import { createNextState } from "@reduxjs/toolkit";
 import config from "../config/config";
 import { Client,Databases,Storage,ID,Query} from "appwrite";
 import authService from "./auth";
-
+import AiJudgeService from "../Pages/ChronicleAds/AgenticAI_Judge";
 
 export class Service{
     client = new Client();
@@ -686,6 +686,138 @@ export class Service{
             return response.documents.map(doc => ({ month: doc.month }));
         } catch (error) {
             console.error("Error fetching available months:", error);
+            throw error;
+        }
+    }
+
+
+
+    // ADS LOGIC
+    async createAd(adData) {
+        try {
+            const existing = await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteAdsId,
+                [
+                    Query.equal("userId", adData.userId),
+                ]
+            )
+            if (existing.documents.length > 0) {
+                throw new Error("Ad already exists !! You have reached the limit of one ad per user.");
+            }
+            return await this.databases.createDocument(
+                config.appwriteDataBaseId,
+                config.appwriteAdsId,
+                ID.unique(),
+                adData
+            );
+        } catch (error) {
+            console.error("Error creating ad:", error);
+            throw error;
+        }
+    }
+
+    async getAllAds(){
+        try {
+            return await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteAdsId,
+                [
+                    Query.orderDesc("$createdAt")
+                ]
+            );
+        } catch (error) {
+            console.error("Error fetching ads:", error);
+            throw error;
+        }
+    }
+    async getAdByUserId(userId) {
+        try {
+            //console.log("Fetching ad for userId:", userId);
+            const docu= await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteAdsId,
+                [
+                    Query.equal("userId", userId),
+                ]
+            )
+            console.log("documents",docu.documents[0])
+            if (docu.documents.length === 0) {
+                return null; 
+            }
+            return docu.documents;
+        } catch (error) {
+            console.error("Error fetching ad by ID:", error);
+            throw error;
+        }
+    }
+    async updateAd(adId, adData) {
+        try {
+            return await this.databases.updateDocument(
+                config.appwriteDataBaseId,
+                config.appwriteAdsId,
+                adId,
+                adData
+            );
+        } catch (error) {
+            console.error("Error updating ad:", error);
+            throw error;
+        }
+    }
+    async deleteAd(adId) {
+        try {
+            await this.databases.deleteDocument(
+                config.appwriteDataBaseId,
+                config.appwriteAdsId,
+                adId
+            );
+            return true;
+        } catch (error) {
+            console.error("Error deleting ad:", error);
+            throw error;
+        }
+    }
+    async getAdById(adId) {
+        try {
+            return await this.databases.getDocument(
+                config.appwriteDataBaseId,
+                config.appwriteAdsId,
+                adId
+            );
+        } catch (error) {
+            console.error("Error fetching ad by ID:", error);
+            throw error;
+        }
+    }
+    async incrementAdCounts(adId) {
+        try {
+            const ad = await this.getAdById(adId);
+            if (!ad) {
+                throw new Error("Ad not found");
+            }
+            //console.log("Ad before increment:", ad);
+            const updatedClicks = (ad.NoOfClicks || 0) + 1;
+            //console.log("Updated clicks:", updatedClicks); 
+            return await this.updateAd(adId, {
+                NoOfClicks : updatedClicks
+            });
+        } catch (error) {
+            console.error("Error incrementing ad counts:", error);
+            throw error;
+        }
+    }
+    async getAllApprovedAds() {
+        try {
+            return await this.databases.listDocuments(
+                config.appwriteDataBaseId,
+                config.appwriteAdsId,
+                [
+                    Query.equal("moderationStatus", "APPROVED"),
+                    Query.orderDesc("$createdAt")
+                ]
+            );
+        } catch (error) {
+            console.error("Error fetching approved ads:", error);
             throw error;
         }
     }

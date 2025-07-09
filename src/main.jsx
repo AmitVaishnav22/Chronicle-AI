@@ -20,6 +20,7 @@ import UserInfo from "./Pages/UserInfo.jsx"
 import TrendingNews from "./Pages/News/TrendingNews.jsx"
 import SearchUser from './Pages/searchUser.jsx'
 import LeaderBoard from './Pages/LeaderBoard.jsx'
+import ChronicleAds from './Pages/ChronicleAds/ChroincleAds.jsx'
 
 const router=createBrowserRouter([
   {
@@ -126,8 +127,11 @@ const router=createBrowserRouter([
       {
         path:'/leaderboard',
         element:<LeaderBoard/>
+      },
+      {
+        path:'/chronicle-ads',
+        element:<ChronicleAds/>
       }
-
     ]
 
   }

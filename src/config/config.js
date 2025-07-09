@@ -13,6 +13,7 @@ const config={
     appwriteUserSearchHistoryId:String(import.meta.env.VITE_APPWRITE_RECENT_USERSEARCH_ID),
     appwriteTopRatedHistoryId:String(import.meta.env.VITE_APPWRITE_TOPRATEDHISTORY_ID),
     appwriteRatingsId:String(import.meta.env.VITE_APPWRITE_RATING_ID),
+    appwriteAdsId:String(import.meta.env.VITE_APPWRITE_ADS_ID),
 }
 
 export default config   
