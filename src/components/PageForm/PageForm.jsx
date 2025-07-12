@@ -139,7 +139,6 @@ export default function PostForm({ post }) {
                     )}
                 </Button>
                 <div className="mt-4">
-                <PromoCard/>
                 </div>
             </div>
         </form>
