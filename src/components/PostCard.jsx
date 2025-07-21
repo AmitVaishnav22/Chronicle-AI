@@ -6,6 +6,7 @@ import authService from "../appwrite/auth";
 import { FaCommentDots } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
 import { AiOutlineEye } from "react-icons/ai";
+import ShareButton from "./shareFeature/shareOption";
 function PostCard({ $id, title, featuredImg ,userId,likes,comments,userName,Views,content}) {
   const [user,setUser]=useState(null)
   const navigate = useNavigate();
@@ -102,6 +103,9 @@ return (
             <span className="flex items-center gap-1">
               {comments.length} <FaCommentDots size={16} />
             </span>
+            <ShareButton 
+              postUrl={`https://chronicle-woad.vercel.app/post/${$id}`} 
+            />
           </div>
         </div>
       </div>

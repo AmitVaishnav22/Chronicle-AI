@@ -12,6 +12,7 @@ import { FaCommentDots } from "react-icons/fa";
 import { AiOutlineEye } from "react-icons/ai";
 import AiService from "../components/BlogAI/BlogAIService.js";
 import SummaryDisplay from "../components/SummaryDisplay.jsx";
+import ShareButton from "../components/shareFeature/shareOption.jsx";
 
 export default function Post() {
     const [post, setPost] = useState(null);
@@ -27,6 +28,7 @@ export default function Post() {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
     const [isBookmarked, setIsBookmarked] = useState(false);
+    const isLogginIn = !!userData;
 
 
     useEffect(() => {
@@ -268,6 +270,7 @@ export default function Post() {
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                 <div className="absolute left-6 top-6">
+                    {isLogginIn?(<>
                     <button
                         onClick={() => handleToggleBookmark(userData.$id,post.$id)}
                         className="bg-blue-500 text-white p-2 rounded-full shadow-md hover:bg-blue-600 focus:outline-none"
@@ -281,6 +284,7 @@ export default function Post() {
                             <path d="M5 3v18l7-5 7 5V3z" />
                         </svg>
                     </button>
+                    </>):(<></>)}
                 </div>
                 
                     <img
@@ -302,113 +306,121 @@ export default function Post() {
                 <div className="w-full mb-6">
                     <h1 className="text-2xl text-white font-bold">{post.title}</h1>
                 </div>
-                <div className="flex justify-end mb-4">
-                <button
-                    onClick={handleSummarize}
-                    className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-2 px-4 transition-all rounded-l"
-                    disabled={loading}
-                >
-                    {loading ? "Summarizing..." : "✨ Summarize Content"}
-                </button>
-                {summary && (
-                <div className="fixed inset-0 flex items-center justify-end right-10 bg-black bg-opacity-50 z-50">
-                    <div className="bg-purple-600 text-white p-6 rounded-xl max-w-md w-full relative">
+                {isLogginIn?(<>
+                    <div className="flex justify-end mb-4">
                     <button
-                        onClick={() => setSummary(null)}
-                        className="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-600 rounded-full w-6 h-6 flex items-center justify-center text-xs"
+                        onClick={handleSummarize}
+                        className="bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-2 px-4 transition-all rounded-l"
+                        disabled={loading}
                     >
-                        ❌
+                        {loading ? "Summarizing..." : "✨ Summarize Content"}
                     </button>
-                    <SummaryDisplay summary={summary} />
-                    </div>
-                </div>
-                )}
-                    <button
-                        onClick={isSpeaking ? stopSpeaking : speakContent}
-                        className={`px-4 py-1 text-white text-xs font-bold ${
-                        isSpeaking ? 'bg-red-600 hover:bg-red-700 ' : 'bg-purple-600 hover:bg-purple-700 rounded-r'
-                        } text-white shadow transition`}
-                    >
-                        {isSpeaking ? '🛑 Stop' : '🎧 Listen to Content'}
-                    </button>
-                    {isSpeaking && (
-                    <>
+                    {summary && (
+                    <div className="fixed inset-0 flex items-center justify-end right-10 bg-black bg-opacity-50 z-50">
+                        <div className="bg-purple-600 text-white p-6 rounded-xl max-w-md w-full relative">
                         <button
-                        onClick={handlePauseResume}
-                        className="px-4 py-1 bg-green-600 hover:bg-green-700 text-white  shadow transition"
+                            onClick={() => setSummary(null)}
+                            className="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-600 rounded-full w-6 h-6 flex items-center justify-center text-xs"
                         >
-                        {isPaused ? '▶️ Resume' : '⏸️ Pause'}
+                            ❌
                         </button>
-
-                        {/* Speed Control Dropdown */}
-                        <div className="relative w-25">
-                        <button
-                            onClick={() => setShowSpeedMenu(!showSpeedMenu)}
-                            className="px-3 py-1  h-9 bg-gray-300 hover:bg-gray-400 text-black rounded-r shadow transition text-sm"
-                        >
-                            ⚙️ {speechRate}x
-                        </button>
-
-                        {showSpeedMenu && (
-                            <div className="absolute right-0 mt-1 bg-white border rounded shadow z-10">
-                            {[0.5, 1, 1.5, 2].map((rate) => (
-                                <button
-                                key={rate}
-                                onClick={() => {
-                                    handleSpeedChange(rate);
-                                    setShowSpeedMenu(false);
-                                }}
-                                className={`block w-full px-4 py-2 text-left text-sm ${
-                                    speechRate === rate
-                                    ? 'bg-purple-800 text-white'
-                                    : 'text-gray-800 hover:bg-gray-100'
-                                }`}
-                                >
-                                {rate}x
-                                </button>
-                            ))}
-                            </div>
-                        )}
+                        <SummaryDisplay summary={summary} />
                         </div>
-                    </>
-                    )}
-                
-                </div>
-                <div className="browser-css text-white leading-relaxed tracking-wide text-lg">
-                    {words.map((word, index) => (
-                        <span
-                        key={index}
-                        className={`transition-all duration-150 ${
-                            index === currentWordIndex
-                            ? 'bg-yellow-500 text-black rounded px-1'
-                            : ''
-                        }`}
-                        onClick={() => {
-                            if (isSpeaking || isPaused) {
-                              window.speechSynthesis.cancel();
-                              setIsSpeaking(false);
-                              setIsPaused(false);
-                            }
-                            speakContentFromIndex(index, speechRate, words);
-                          }}
-                        >
-                        {word}{' '}
-                        </span>
-                    ))}
                     </div>
-                <div className="browser-css text-white">
-                    {!isInAudio ? parse(post.content) : "" }
-                    <span className="font-semibold text-gray-400 inline-block w-full text-right">
-                        uploaded on : {new Date(post.$createdAt).toLocaleString()}
-                    </span>
-                    <span
-                        className="font-semibold text-purple-400 inline-block w-full text-right cursor-pointer hover:underline"
-                        onClick={handleUserClick}
-                    >
-                        uploaded By : {post.userName}
-                    </span>
-                </div>
+                    )}
+                        <button
+                            onClick={isSpeaking ? stopSpeaking : speakContent}
+                            className={`px-4 py-1 text-white text-xs font-bold ${
+                            isSpeaking ? 'bg-red-600 hover:bg-red-700 ' : 'bg-purple-600 hover:bg-purple-700 rounded-r'
+                            } text-white shadow transition`}
+                        >
+                            {isSpeaking ? '🛑 Stop' : '🎧 Listen to Content'}
+                        </button>
+                        {isSpeaking && (
+                        <>
+                            <button
+                            onClick={handlePauseResume}
+                            className="px-4 py-1 bg-green-600 hover:bg-green-700 text-white  shadow transition"
+                            >
+                            {isPaused ? '▶️ Resume' : '⏸️ Pause'}
+                            </button>
+
+                            {/* Speed Control Dropdown */}
+                            <div className="relative w-25">
+                            <button
+                                onClick={() => setShowSpeedMenu(!showSpeedMenu)}
+                                className="px-3 py-1  h-9 bg-gray-300 hover:bg-gray-400 text-black rounded-r shadow transition text-sm"
+                            >
+                                ⚙️ {speechRate}x
+                            </button>
+
+                            {showSpeedMenu && (
+                                <div className="absolute right-0 mt-1 bg-white border rounded shadow z-10">
+                                {[0.5, 1, 1.5, 2].map((rate) => (
+                                    <button
+                                    key={rate}
+                                    onClick={() => {
+                                        handleSpeedChange(rate);
+                                        setShowSpeedMenu(false);
+                                    }}
+                                    className={`block w-full px-4 py-2 text-left text-sm ${
+                                        speechRate === rate
+                                        ? 'bg-purple-800 text-white'
+                                        : 'text-gray-800 hover:bg-gray-100'
+                                    }`}
+                                    >
+                                    {rate}x
+                                    </button>
+                                ))}
+                                </div>
+                            )}
+                            </div>
+                        </>
+                        )}
+                    
+                    </div>
+                    <div className="browser-css text-white leading-relaxed tracking-wide text-lg">
+                        {words.map((word, index) => (
+                            <span
+                            key={index}
+                            className={`transition-all duration-150 ${
+                                index === currentWordIndex
+                                ? 'bg-yellow-500 text-black rounded px-1'
+                                : ''
+                            }`}
+                            onClick={() => {
+                                if (isSpeaking || isPaused) {
+                                window.speechSynthesis.cancel();
+                                setIsSpeaking(false);
+                                setIsPaused(false);
+                                }
+                                speakContentFromIndex(index, speechRate, words);
+                            }}
+                            >
+                            {word}{' '}
+                            </span>
+                        ))}
+                        </div>
+                    <div className="browser-css text-white">
+                        {!isInAudio ? parse(post.content) : "" }
+                        <span className="font-semibold text-gray-400 inline-block w-full text-right">
+                            uploaded on : {new Date(post.$createdAt).toLocaleString()}
+                        </span>
+                        <span
+                            className="font-semibold text-purple-400 inline-block w-full text-right cursor-pointer hover:underline"
+                            onClick={handleUserClick}
+                        >
+                            uploaded By : {post.userName}
+                        </span>
+                    </div>
+                    
+                    
+                    </>):(<><div className="text-yellow-400 text-sm font-semibold object-contain animate-pulse">
+                        PLEASE LOGIN TO ENGAGE IN OUR PREMIUM FEATURES
+                    </div></>)}
+                
             {/* Like and Comments Section */}
+            {isLogginIn ? (<>
             <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center gap-4">
                     <button
@@ -428,6 +440,9 @@ export default function Post() {
                         <AiOutlineEye size={16} className="ml-1" />
                         <span className="ml-2">{post.Views || 0} Views </span>
                     </div>
+                    <ShareButton
+                    postUrl={`https://chronicle-woad.vercel.app/post/${post.$id}`}
+                    />
                 </div>
             </div>
             <div className="mt-6">
@@ -473,6 +488,7 @@ export default function Post() {
                     <p className="text-gray-500">No comments yet.</p>
                 )}
             </div>
+            </>):(<></>)}
             </Container>
             {showAlert && (
                 <Alert
@@ -481,7 +497,9 @@ export default function Post() {
                     onCancel={cancelDelete}
                 />
             )}
+            
         </div>
+        
     ) : null;
 }
 
