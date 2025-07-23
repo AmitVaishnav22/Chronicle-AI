@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import UserAds from "./UserAds";
 import AiJudgeService from "./AgenticAI_Judge";
 import { Unlink } from "lucide-react"; // Importing icons for future use
+import ChoronoDropAD from "../../components/Ads/ChronoDropPromotion";
 
 const ChronicleAds = () => {
   const [formData, setFormData] = useState({ title: "", description: "", url: "" });
@@ -152,6 +153,7 @@ const ChronicleAds = () => {
       )}
 
       <UserAds />
+      <ChoronoDropAD/>
     </>
 
   );

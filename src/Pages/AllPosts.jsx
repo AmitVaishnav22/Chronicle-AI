@@ -4,7 +4,7 @@ import service from "../appwrite/database";
 import SearchBar from "../components/Search.jsx"
 import {  setPosts} from "../../src/store/postSlice.js"
 import { useDispatch } from "react-redux";
-import PromoCard from "../components/PromoCard.jsx";
+import PromoCard from "../components/Ads/PromoCard.jsx";
 
 const LIMIT=8;
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PromoCard from "../components/PromoCard";
+import ChoronoDropAD from "../components/Ads/ChronoDropPromotion";
 
 function Home() {
     const navigate = useNavigate();
@@ -137,6 +137,7 @@ function Home() {
                 </div>
                 </div>
             </section>
+            <ChoronoDropAD/>
 
             {/* Footer Section */}
             <footer className="py-8 bg-gray-900 text-center">

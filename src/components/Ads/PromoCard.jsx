@@ -1,6 +1,6 @@
 // components/PromoCard.jsx
 import React from "react";
-import service from "../appwrite/database";
+import service from "../../appwrite/database.js";
 
 const PromoCard = ({id,title,desciption,url}) => {
   const handleClick = async()=> {

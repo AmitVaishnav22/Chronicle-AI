@@ -7,8 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import {addPost,updatePost} from "../../store/postSlice.js"
-import ChatComponent from "../BlogAI/BlogAI.jsx";
-import PromoCard from "../PromoCard.jsx";
+import ChoronoDropAD from "../Ads/ChronoDropPromotion.jsx";
 
 export default function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
@@ -141,6 +140,7 @@ export default function PostForm({ post }) {
                 <div className="mt-4">
                 </div>
             </div>
+            <ChoronoDropAD/>
         </form>
     );
 }

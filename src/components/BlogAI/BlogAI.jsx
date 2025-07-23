@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AiService from "./BlogAIService.js";
 import { FiCopy, FiEdit } from "react-icons/fi";
+import ChoronoDropAD from "../Ads/ChronoDropPromotion.jsx";
 
 const ChatComponent = () => {
   const [prompt, setPrompt] = useState("");
@@ -57,6 +58,7 @@ const ChatComponent = () => {
   };
 
   return (
+    <>
     <div className="p-6 bg-black shadow-lg rounded-lg border border-purple-500 text-white max-w-2xl w-full mx-auto rounded-lg shadow-lg flex flex-col h-[80vh] md:h-[90vh]">
       <h1 className="text-2xl font-bold mb-4 text-center">Chronicle AI</h1>
       <div className="flex-1 overflow-y-auto mb-4 p-2 space-y-4">
@@ -140,6 +142,8 @@ const ChatComponent = () => {
       </div>
       {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
     </div>
+    <ChoronoDropAD/>
+    </>
   );
 };
 
