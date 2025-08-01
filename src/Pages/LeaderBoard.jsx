@@ -171,7 +171,7 @@ function LeaderBoard() {
                       onClick={() => handleUserClick(user?.userId)}
                       className="border-t border-gray-800 hover:bg-gray-800 cursor-pointer transition-colors"
                     >
-                      <td className="px-4 py-3 font-medium">#{idx + 4}</td>
+                      <td className="px-4 py-3 font-medium">{user.rank}</td>
                       <td className="px-4 py-3">
                         <img
                           src={
