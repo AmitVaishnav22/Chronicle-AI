@@ -4,10 +4,10 @@ import service from "../appwrite/database";
 import { Link } from "react-router-dom";
 import authService from "../appwrite/auth";
 import { FaCommentDots } from "react-icons/fa";
-import { AiFillLike } from "react-icons/ai";
+import { AiFillLike, AiOutlineExport } from "react-icons/ai";
 import { AiOutlineEye } from "react-icons/ai";
 import ShareButton from "./shareFeature/shareOption";
-function PostCard({ $id, title, featuredImg ,userId,likes,comments,userName,Views,content}) {
+function PostCard({ $id, title, featuredImg ,userId,likes,comments,userName,Views,content,exportCount}) {
   const [user,setUser]=useState(null)
   const navigate = useNavigate();
   
@@ -103,6 +103,10 @@ return (
             <span className="flex items-center gap-1">
               {comments.length} <FaCommentDots size={16} />
             </span>
+            <span className="flex items-center gap-1">
+              {exportCount} <AiOutlineExport size={16} />
+            </span>
+            
             <ShareButton 
               postUrl={`https://chronicle-woad.vercel.app/post/${$id}`} 
             />

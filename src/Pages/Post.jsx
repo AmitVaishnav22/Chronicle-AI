@@ -10,6 +10,7 @@ import { removePost } from "../store/postSlice.js";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { FaCommentDots } from "react-icons/fa";
 import { AiOutlineEye } from "react-icons/ai";
+import { AiOutlineExport } from "react-icons/ai";
 import AiService from "../components/BlogAI/BlogAIService.js";
 import SummaryDisplay from "../components/SummaryDisplay.jsx";
 import ShareButton from "../components/shareFeature/shareOption.jsx";
@@ -440,8 +441,12 @@ export default function Post() {
                         <AiOutlineEye size={16} className="ml-1" />
                         <span className="ml-2">{post.Views || 0} Views </span>
                     </div>
+                    <div className="flex items-center text-gray-400">
+                        <AiOutlineExport size={16} className="ml-1" />
+                        <span className="ml-2">{post.exportCount || 0} Exports </span>
+                    </div>
                     <ShareButton
-                    postUrl={`https://chronicle-woad.vercel.app/post/${post.$id}`}
+                        postUrl={`https://chronicle-woad.vercel.app/post/${post.$id}`}
                     />
                 </div>
             </div>

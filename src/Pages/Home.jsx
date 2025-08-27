@@ -29,7 +29,7 @@ function Home() {
             {/* Hero Section */}
             <section className="hero py-16 text-center">
                 <div className="hero-content max-w-4xl mx-auto">
-                <h1 className="text-5xl font-bold text-purple-500">Chronicle AI : Online article sharing platform</h1>
+                <h1 className="text-5xl font-bold text-purple-500">Chronicle AI : Craft. Share. Inspire.</h1>
                 <p className="text-lg mt-4 text-gray-300">
                     Create, manage, and scale your articles effortlessly with the power of AI.
                 </p>
