@@ -4,16 +4,10 @@ import config from "../../config/config.js";
 const API_KEY =  config.newsApiKey;
 const BASE_URL = config.newsApiUrl;
 
-const getTrendingNews = async (category = "general", country = "us", page = 1) => {
+const getTrendingNews = async (category = "general", country = "in", page = 1) => {
     try {
-        const res = await axios.get(`${BASE_URL}/top-headlines`, {
-            params: {
-                country,
-                category,
-                token: API_KEY,
-                page,
-                pageSize: 10,
-            },
+        const res = await axios.get("/api/news", {
+            params: { category, country, page },
         });
         //console.log("Response Data:", res.data.articles);
         return res.data.articles;

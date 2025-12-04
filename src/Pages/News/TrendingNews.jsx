@@ -15,7 +15,7 @@ const LIMIT = 10;
 function TrendingNews() {
     const [articles, setArticles] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState("general");
-    const [selectedRegion, setSelectedRegion] = useState("us");
+    const [selectedRegion, setSelectedRegion] = useState("in");
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -32,6 +32,7 @@ function TrendingNews() {
         const fetchNews = async () => {
             setLoading(true);
             const data = await getTrendingNews(selectedCategory, selectedRegion, page);
+            console.log(data);
             setArticles((prev) => [...prev, ...data]);
             if (data.length < LIMIT) setHasMore(false);
             setLoading(false);
