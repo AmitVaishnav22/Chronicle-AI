@@ -21,5 +21,19 @@ export default class AiService {
         throw error;
       }
     }
+    static async getNews({ category = "general", country = "in", page = 1 }) {
+      try {
+        const endpoint = `https://${config.appwriteFunctionId}.appwrite.global/news?category=${category}&country=${country}&page=${page}`;
+
+        const res = await fetch(endpoint);
+
+        if (!res.ok) throw new Error("News fetch failed");
+
+        return await res.json();
+      } catch (err) {
+        console.error("News Error:", err);
+        return { articles: [] }; // fail safe
+      }
+    }
   }
   

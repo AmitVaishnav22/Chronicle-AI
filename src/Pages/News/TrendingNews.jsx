@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getTrendingNews } from './newsService.js';
+import { timeAgo } from '../../utils/timeAgo.js';
+import { FaStopwatch } from "react-icons/fa";
 
 const categories = ["general", "technology", "business", "entertainment", "sports", "health", "science"];
 const regions = [
@@ -87,25 +89,34 @@ function TrendingNews() {
                     <div className="w-6 h-6 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
                 </div>
                 )}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 border-purple-600">
                 {articles.map((article, index) => {
                     const isLast = index === articles.length - 1;
                     return (
                         <div
                             key={index}
                             ref={isLast ? lastArticleRef : null}
-                            className="border rounded-md p-4 shadow-md bg-gray-800"
+                            className="border rounded-md p-4 shadow-md bg-gray-900 hover:bg-gray-800 transition"
                         >
-                            <h3 className="text-lg text-white font-semibold">{article.title}</h3>
-                            <h3 className="text-sm text-purple-300 font-semibold">Source : {article.source.name || "Unknown"}</h3>
-
-                            {article.image && (
-                                <img
-                                    src={article.image}
-                                    alt=""
-                                    className="my-2 w-full h-50 object-cover rounded"
-                                />
-                            )}
+                            <h3 className="text-lg text-white font-semibold">{article.title}</h3>                
+                            <h3 className="text-blue-500 font-semibold">
+                                Source: {article.source.name || "Unknown"}
+                            </h3>
+                            <div className='relative w-full'>
+                                {article.image && (
+                                    <>
+                                    <img
+                                        src={article.image}
+                                        alt=""
+                                        className="my-2 w-full h-50 object-cover rounded"
+                                    />
+                                    <div className="absolute top-3 right-3 bg-black/50 text-white px-2 py-1 rounded flex items-center gap-1 text-xs">
+                                        <FaStopwatch />
+                                        <span>{timeAgo(article.publishedAt)}</span>
+                                    </div>
+                                    </>
+                                )}
+                            </div>
                             <p className="text-white">{article.description}</p>
                             <a
                                 href={article.url}
@@ -115,6 +126,8 @@ function TrendingNews() {
                             >
                                 Read more
                             </a>
+                            
+
                         </div>
                     );
                 })}
