@@ -533,7 +533,7 @@ export class Service{
                     Query.equal("SearchedUserId", userId),
                 ]
             );
-            console.log("response",response)
+            //console.log("response",response)
             return response.documents.length > 0; 
         } catch (error) {
             console.error("Error checking user search history:", error);
@@ -741,7 +741,7 @@ export class Service{
                     Query.equal("userId", userId),
                 ]
             )
-            console.log("documents",docu.documents[0])
+            //console.log("documents",docu.documents[0])
             if (docu.documents.length === 0) {
                 return null; 
             }
