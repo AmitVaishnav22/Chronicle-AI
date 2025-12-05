@@ -12,7 +12,7 @@ function UserAds() {
   const fetchUserAds = async () => {
     try {
       const res = await service.getAdByUserId(user?.$id);
-      console.log("Fetched user ads:", res);
+      //console.log("Fetched user ads:", res);
       const ads = res || []; 
       setUserAds(ads);
     } catch (error) {
