@@ -34,7 +34,7 @@ function TrendingNews() {
         const fetchNews = async () => {
             setLoading(true);
             const data = await getTrendingNews(selectedCategory, selectedRegion, page);
-            console.log(data);
+            //console.log(data);
             setArticles((prev) => [...prev, ...data]);
             if (data.length < LIMIT) setHasMore(false);
             setLoading(false);
